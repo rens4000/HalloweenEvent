@@ -1,0 +1,7 @@
+name: HalloweenEvent
+version: 1.0
+author: The1AndOnlyRens4000
+main: nl.gewoonhdgaming.halloween.Main
+commands:
+  halloween:
+    description: Zooi
