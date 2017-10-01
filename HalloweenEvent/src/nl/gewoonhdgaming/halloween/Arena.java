@@ -75,12 +75,10 @@ public class Arena {
 		Score filler1 = obj.getScore(ChatColor.GRAY + "");
 		filler1.setScore(5);
 		int num = Arena.getPlayers().size() + 1;
-		Score status = obj.getScore(ChatColor.RED + "Deze gamemode is open van");
+		Score status = obj.getScore(ChatColor.RED + "Beschikbaar");
 		status.setScore(5);
-		Score status2 = obj.getScore(ChatColor.YELLOW + " 31 oktober ");
-		status2.setScore(3);
-		Score status3 = obj.getScore(ChatColor.RED + "tot " + ChatColor.YELLOW + "11 november!");
-		status3.setScore(2);
+		Score status2 = obj.getScore(ChatColor.YELLOW + "van 31 Okt t/m 11 Nov!");
+		status2.setScore(5);
 
 		Score filler2 = obj.getScore("");
 		filler2.setScore(1);

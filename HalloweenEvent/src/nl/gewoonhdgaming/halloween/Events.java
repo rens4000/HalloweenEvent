@@ -190,7 +190,6 @@ public class Events implements Listener {
 
 		}
 		
-		@SuppressWarnings("deprecation")
 		@EventHandler
 		public void onPlayerMove(PlayerMoveEvent e) {
 			Player p = e.getPlayer();
@@ -246,7 +245,7 @@ public class Events implements Listener {
 						@Override
 						public void run() {
 							cooldown2.remove(e.getPlayer().getName());
-							e.getPlayer().sendMessage(ChatColor.AQUA + "Je kan nu iemand slaan met je staf!!");
+							e.getPlayer().sendMessage(ChatColor.AQUA + "Je kan nu iemand slaan met je wand!!");
 							
 						}
 					}.runTaskLater(Main.getInstance(), 200);
