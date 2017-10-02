@@ -123,7 +123,7 @@ public class Events implements Listener {
 			Arena.getPlayers().remove(p.getName());
 			int n = Arena.getPlayers().size() - 1;
 			Main.getInstance().broadcast(ChatColor.RED + p.getName() + ChatColor.GREEN + " Heeft de game verlaten(" + n + "/20)");
-			
+			Arena.reloadScoreboard();
 		
 	}
 		@EventHandler
@@ -154,6 +154,10 @@ public class Events implements Listener {
 		        ItemStack i = new ItemStack(Material.BLAZE_ROD);
 				ItemMeta im = i.getItemMeta();
 				im.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "Demoon staf");
+				List<String> lore1 = new ArrayList<>();
+				lore1.add(ChatColor.GREEN + "Maak iemand een demoon!");
+				lore1.add(ChatColor.RED + "Cooldown van 10 secondes");
+				im.setLore(lore1);
 				i.setItemMeta(im);
 		        
 		        if(!damagerPlayer.getItemInHand().equals(i)) {
@@ -182,6 +186,17 @@ public class Events implements Listener {
 		    		taker.getInventory().setHelmet(new ItemStack(Material.SKULL_ITEM, 1, (byte) 1));
 		    		Team.getInstance().getTeam(taker).remove(taker.getName());
 		    		Team.getInstance().addDemonen(taker);
+		    		taker.sendTitle(ChatColor.DARK_RED + "Je bent een demoon", null);
+		    		taker.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 301, 1));
+		    		ItemStack i2 = new ItemStack(Material.COMPASS);
+		    		ItemMeta im2 = i2.getItemMeta();
+		    		im2.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Teleporter");
+		    		List<String> lore = new ArrayList<>();
+		    		lore.add(ChatColor.GREEN + "Teleporteer naar een random speler!");
+		    		lore.add(ChatColor.RED + "Cooldown van 60 secondes");
+		    		im2.setLore(lore);
+		    		i2.setItemMeta(im2);
+		    		taker.getInventory().addItem(i2);
 		    		taker.sendMessage(ChatColor.DARK_RED + "Je bent in een demoon veranderd! Zorg ervoor dat iedereen een demoon wordt door ze te slaan met je staf!");
 		    		if(Team.getInstance().mensen.size() < 1) {
 				    	Main.getInstance().broadcast(ChatColor.DARK_RED + "De Demonen hebben gewonnen!");

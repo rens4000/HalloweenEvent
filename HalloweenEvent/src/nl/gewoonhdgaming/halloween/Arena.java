@@ -56,12 +56,7 @@ public class Arena {
 		countdown();
 		p.setGameMode(GameMode.SURVIVAL);
 	
-		p.setScoreboard(board);
-		
-		for(String s : players) {
-			Player r = Bukkit.getPlayer(s);
-			r.setScoreboard(board);
-		}
+		reloadScoreboard();
 	
 	}
 	
@@ -74,11 +69,14 @@ public class Arena {
 		
 		final Score filler1 = obj.getScore(ChatColor.GRAY + "");
 		filler1.setScore(5);
-		final int num = Arena.getPlayers().size() + 1;
+		final int num = Arena.getPlayers().size();
 		final Score status = obj.getScore(ChatColor.RED + "Beschikbaar");
 		status.setScore(5);
 		final Score status2 = obj.getScore(ChatColor.YELLOW + "van 31 Okt t/m 11 Nov!");
 		status2.setScore(5);
+		
+		final Score player = obj.getScore(ChatColor.AQUA + "Spelers: " + num + "/20");
+		player.setScore(4);
 
 		final Score filler2 = obj.getScore("");
 		filler2.setScore(1);
@@ -122,6 +120,13 @@ public class Arena {
 		}.runTaskTimer(Main.getInstance(), 0, 20);
 	}
 	
+	public static void reloadScoreboard() {
+		scoreboardCreation();
+		for(int i = 0; i < players.size(); i++) {
+			Player p = Bukkit.getPlayer(players.get(i));
+			p.setScoreboard(board);
+		}
+	}
 	
 	@SuppressWarnings("deprecation")
 	public static void start() {
@@ -134,12 +139,13 @@ public class Arena {
 		ItemMeta im = i.getItemMeta();
 		im.setDisplayName(ChatColor.RED + "" + ChatColor.BOLD + "Demoon staf");
 		List<String> lore1 = new ArrayList<>();
+		lore1.add(ChatColor.GREEN + "Maak iemand een demoon!");
+		lore1.add(ChatColor.RED + "Cooldown van 10 secondes");
 		im.setLore(lore1);
 		i.setItemMeta(im);
 		r.getInventory().addItem(i);
 		
-		lore1.add(ChatColor.GREEN + "Maak iemand een demoon!");
-		lore1.add(ChatColor.RED + "Cooldown van 10 secondes");
+		
 		
 		r.getInventory().setHelmet(new ItemStack(Material.SKULL_ITEM, 1, (byte) 1));
 		r.sendMessage(ChatColor.DARK_RED + "Je bent een demoon! Je moet ervoor zorgen dat iedereen een demoon wordt door ze te slaan met je demonen staf!");
@@ -174,9 +180,10 @@ public class Arena {
 			Team.getInstance().addMensen(p);
 			p.teleport(spawn1);
 			p.sendMessage(ChatColor.GREEN + "Je bent een mens! Je moet zo lang mogelijk niet geslagen worden door een demoon met zijn demonen staf!");
-			p.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, 300, 1));
+			p.getInventory().addItem(i3);
+			
 			}
-			}
+		}
 		
 		Main.getInstance().broadcast(ChatColor.GREEN + "De game eindigd in 300 secondes!");
 		
