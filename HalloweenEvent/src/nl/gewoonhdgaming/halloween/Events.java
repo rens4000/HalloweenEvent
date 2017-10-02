@@ -12,6 +12,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -31,11 +32,14 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class Events implements Listener {
 	
+	public List<String> cooldown3 = new ArrayList<>();
 	public List<String> cooldown = new ArrayList<>();
 	public List<String> cooldown2 = new ArrayList<>();
 	
@@ -157,10 +161,22 @@ public class Events implements Listener {
 		        } else {
 		        	
 		        	if(cooldown2.contains(damagerPlayer.getName())) {
-		        		damager.sendMessage(ChatColor.RED + "Je hebt nog een (compass)cooldown!");
+		        		damager.sendMessage(ChatColor.RED + "Je hebt nog een cooldown!");
 		        		e.setCancelled(true);
 		        		return;
 		        	}
+		        	
+		        	cooldown2.add(damagerPlayer.getName());
+		        	
+		        	new BukkitRunnable() {
+						
+						@Override
+						public void run() {
+							cooldown2.remove(damagerPlayer.getName());
+							damagerPlayer.sendMessage(ChatColor.AQUA + "Je kan nu iemand slaan met je wand!!");
+							
+						}
+					}.runTaskLater(Main.getInstance(), 200);
 		        	
 		    		taker.getInventory().addItem(i);
 		    		taker.getInventory().setHelmet(new ItemStack(Material.SKULL_ITEM, 1, (byte) 1));
@@ -196,7 +212,9 @@ public class Events implements Listener {
 			if(Team.getInstance().getDemonen().contains(p.getName())) {
 				if(p.getGameMode() == GameMode.CREATIVE || p.getGameMode() == GameMode.SPECTATOR)
 					return;
-				if(p.isOnGround()) {
+
+				LivingEntity le = (LivingEntity) p;
+				if(le.isOnGround()) {
 					if(!p.getAllowFlight()) {
 							
 						p.setAllowFlight(true);
@@ -211,6 +229,7 @@ public class Events implements Listener {
 		public void onAction(PlayerInteractEvent e) {
 			if(cooldown.contains(e.getPlayer().getName()))
 				return;
+			
 			ItemStack i2 = new ItemStack(Material.COMPASS);
 			ItemMeta im2 = i2.getItemMeta();
 			im2.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Teleporter");
@@ -219,7 +238,23 @@ public class Events implements Listener {
 			lore.add(ChatColor.AQUA + "Cooldown van 60 secondes");
 			im2.setLore(lore);
 			i2.setItemMeta(im2);
+			
 			if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+				//INVIS
+				if(e.getPlayer().getItemInHand().getType() == Material.WATCH) {
+					cooldown3.add(e.getPlayer().getName());
+					e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 300, 1));
+					new BukkitRunnable() {
+						
+						@Override
+						public void run() {
+							cooldown3.remove(e.getPlayer().getName());
+							e.getPlayer().sendMessage(ChatColor.AQUA + "Je kan nu weer onzichtbaar worden");
+							
+						}
+					}.runTaskLater(Main.getInstance(), 600);
+				}
+				//TELEPORTER
 				if(e.getPlayer().getItemInHand().getType() == Material.COMPASS) {
 					cooldown.add(e.getPlayer().getName());
 					cooldown2.add(e.getPlayer().getName());
@@ -236,7 +271,7 @@ public class Events implements Listener {
 						@Override
 						public void run() {
 							cooldown.remove(e.getPlayer().getName());
-							e.getPlayer().sendMessage(ChatColor.AQUA + "Cooldown afgelopen!");
+							e.getPlayer().sendMessage(ChatColor.AQUA + "Teleporter Cooldown afgelopen!");
 							
 						}
 					}.runTaskLater(Main.getInstance(), 1200);

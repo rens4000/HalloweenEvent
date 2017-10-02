@@ -24,7 +24,7 @@ import org.bukkit.scoreboard.Scoreboard;
 public class Arena {
 	
 	
-	private static List<String> players = new ArrayList<>();
+	private static final List<String> players = new ArrayList<>();
 	
 	
 	private static int minPlayers = 2;
@@ -72,18 +72,18 @@ public class Arena {
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		obj.setDisplayName(ChatColor.DARK_RED + "" + ChatColor.BOLD + "HalloweenEvent");
 		
-		Score filler1 = obj.getScore(ChatColor.GRAY + "");
+		final Score filler1 = obj.getScore(ChatColor.GRAY + "");
 		filler1.setScore(5);
-		int num = Arena.getPlayers().size() + 1;
-		Score status = obj.getScore(ChatColor.RED + "Beschikbaar");
+		final int num = Arena.getPlayers().size() + 1;
+		final Score status = obj.getScore(ChatColor.RED + "Beschikbaar");
 		status.setScore(5);
-		Score status2 = obj.getScore(ChatColor.YELLOW + "van 31 Okt t/m 11 Nov!");
+		final Score status2 = obj.getScore(ChatColor.YELLOW + "van 31 Okt t/m 11 Nov!");
 		status2.setScore(5);
 
-		Score filler2 = obj.getScore("");
+		final Score filler2 = obj.getScore("");
 		filler2.setScore(1);
 
-		Score serverName = obj.getScore(ChatColor.AQUA + "GewoonHDGaming");
+		final Score serverName = obj.getScore(ChatColor.AQUA + "GewoonHDGaming");
 		serverName.setScore(0);
 }
 	
@@ -139,7 +139,7 @@ public class Arena {
 		r.getInventory().addItem(i);
 		
 		lore1.add(ChatColor.GREEN + "Maak iemand een demoon!");
-		lore1.add(ChatColor.AQUA + "Cooldown van 10 secondes");
+		lore1.add(ChatColor.RED + "Cooldown van 10 secondes");
 		
 		r.getInventory().setHelmet(new ItemStack(Material.SKULL_ITEM, 1, (byte) 1));
 		r.sendMessage(ChatColor.DARK_RED + "Je bent een demoon! Je moet ervoor zorgen dat iedereen een demoon wordt door ze te slaan met je demonen staf!");
@@ -151,10 +151,20 @@ public class Arena {
 		im2.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Teleporter");
 		List<String> lore = new ArrayList<>();
 		lore.add(ChatColor.GREEN + "Teleporteer naar een random speler!");
-		lore.add(ChatColor.AQUA + "Cooldown van 60 secondes");
+		lore.add(ChatColor.RED + "Cooldown van 60 secondes");
 		im2.setLore(lore);
 		i2.setItemMeta(im2);
 		r.getInventory().addItem(i2);
+		
+		//CLOCK
+		ItemStack i3 = new ItemStack(Material.WATCH);
+		ItemMeta im3 = i3.getItemMeta();
+		im3.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "Onzichtbaarheids spreuk");
+		List<String> lore3 = new ArrayList<>();
+		lore3.add(ChatColor.GREEN + "Maak je zelf onzichtbaar voor 15 secondes!");
+		lore3.add(ChatColor.RED + "Cooldown van 30 secondes");
+		im3.setLore(lore3);
+		i3.setItemMeta(im3);
 		
 		//SPELERS TOEVOEGEN
 		
@@ -225,16 +235,11 @@ public class Arena {
 		duur = 300;
 		countdown = 15;
 		
-		if(players.size() != 0) {
-		
-			for(String s : players) {
-				Player p = Bukkit.getPlayer(s);
-
-				Team.removeTeam(p);
-				p.performCommand("lobby");
-			}
+		for(int i = 0; i < players.size(); i++) {
+			Player p = Bukkit.getPlayer(players.get(i));
+			Team.removeTeam(p);
+			p.performCommand("lobby");
 		}
-		players.removeAll(players);
 		state = GameState.WAITING;	
 		Main.getInstance().getLogger().info("WAITING");
 	}
