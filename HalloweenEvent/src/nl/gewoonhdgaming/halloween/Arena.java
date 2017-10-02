@@ -88,8 +88,14 @@ public class Arena {
 	public static void countdown() {
 		if(players.size() == 1)
 			return;
-		if(state != GameState.WAITING)
+		if(state != GameState.WAITING) {
+			countdown = 15;
+			for(String s : players) {
+				Player p = Bukkit.getPlayer(s);
+				p.setLevel(0);
+			}
 			return;
+		}
 		Main.getInstance().broadcast(ChatColor.AQUA + "Minimum spelers is behaald! Aftellen is begonnen!");
 		state = GameState.STARTING;
 		new BukkitRunnable() {
@@ -98,10 +104,15 @@ public class Arena {
 			@Override
 			public void run() {
 				countdown = countdown -1;
-				if(players.size() < 1) {
+				if(state != GameState.STARTING) {
 					Main.getInstance().broadcast(ChatColor.RED + "Te weinig spelers, aftellen gestopt.");
-					cancel();
+					countdown = 15;
+					for(String s : players) {
+						Player p = Bukkit.getPlayer(s);
+						p.setLevel(0);
+					}
 					state = GameState.WAITING;
+					cancel();
 					return;
 				}
 				if(countdown == 60 | countdown == 30 | countdown == 15 | countdown == 10 | countdown == 5 | countdown == 4 | countdown == 3 | countdown == 2 | countdown == 1) {
@@ -195,7 +206,12 @@ public class Arena {
 
 			@Override
 			public void run() {
-				if(state == GameState.RESETING) {
+				if(state != GameState.INGAME) {
+					for(String s : players) {
+						Player p = Bukkit.getPlayer(s);
+						p.setLevel(0);
+					}
+					duur = 300;
 					cancel();
 					return;
 				}
@@ -230,7 +246,7 @@ public class Arena {
 			@Override
 			public void run() {
 				Main.getInstance().broadcast(ChatColor.GREEN + "De mensen hebben gewonnen! De server wordt herstart!");
-				
+				stop();
 			}
 			
 		}.runTaskLater(Main.getInstance(), 100);
@@ -242,10 +258,31 @@ public class Arena {
 		duur = 300;
 		countdown = 15;
 		
+		for(int i = 0; i < Team.demonen.size(); i++) {
+			Player p = Bukkit.getPlayer(Team.demonen.get(i));
+			Team.removeDemonen(p);
+			players.remove(p.getName());
+			p.performCommand("lobby");
+		}
+		for(int i = 0; i < Team.mensen.size(); i++) {
+			Player p = Bukkit.getPlayer(Team.mensen.get(i));
+			Team.removeMensen(p);
+			players.remove(p.getName());
+			p.performCommand("lobby");
+		}
 		for(int i = 0; i < players.size(); i++) {
 			Player p = Bukkit.getPlayer(players.get(i));
-			Team.removeTeam(p);
-			p.performCommand("lobby");
+			players.remove(p);
+			if(p.isOnline()) p.performCommand("lobby");
+		}
+		for(int i = 0; i < Main.getEvents().cooldown.size(); i++) {
+			Main.getEvents().cooldown.remove(i);
+		}
+		for(int i = 0; i < Main.getEvents().cooldown2.size(); i++) {
+			Main.getEvents().cooldown2.remove(i);
+		}
+		for(int i = 0; i < Main.getEvents().cooldown3.size(); i++) {
+			Main.getEvents().cooldown3.remove(i);
 		}
 		state = GameState.WAITING;	
 		Main.getInstance().getLogger().info("WAITING");

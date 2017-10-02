@@ -20,10 +20,10 @@ public class Team {
 	public void addDemonen(Player p) {
 		demonen.add(p.getName());
 	}
-	public void removeMensen(Player p) {
+	public static void removeMensen(Player p) {
 		mensen.remove(p.getName());
 	}
-	public void removeDemonen(Player p) {
+	public static void removeDemonen(Player p) {
 		demonen.remove(p.getName());
 	}
 	
@@ -38,13 +38,15 @@ public class Team {
 	}
 	
 	public static void removeTeam(Player p) {
+		if(getTeam(p) == null) 
+			return;
 		if(getTeam(p) == mensen) {
-			mensen.remove(p.getName());
+			removeMensen(p);
 			p.removePotionEffect(PotionEffectType.SPEED);
 			return;
 		}
 		if(getTeam(p) == demonen) {
-			demonen.remove(p.getName());
+			removeDemonen(p);
 			p.removePotionEffect(PotionEffectType.NIGHT_VISION);
 			return;
 		}

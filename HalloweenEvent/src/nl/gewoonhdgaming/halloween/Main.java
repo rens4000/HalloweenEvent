@@ -13,8 +13,11 @@ public class Main extends JavaPlugin {
 	
 	private static Main instance;
 	
+	private static Events events;
+	
 	@Override
 	public void onEnable() {
+		events = new Events();
 		Arena.scoreboardCreation();
 		PluginManager pm = getServer().getPluginManager();
 	instance = this;
@@ -25,6 +28,10 @@ public class Main extends JavaPlugin {
 	
 	public static Main getInstance() {
 		return instance;
+	}
+	
+	public static Events getEvents() {
+		return events;
 	}
 	
 	public void broadcast(String msg) {

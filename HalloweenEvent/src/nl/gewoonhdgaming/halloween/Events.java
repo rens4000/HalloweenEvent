@@ -107,23 +107,32 @@ public class Events implements Listener {
 		public void PlayerJoinQuit(PlayerQuitEvent e) {
 			Player p = e.getPlayer();
 			if(!Arena.isActivated()) return;
-			if(Team.getInstance().getMensen().size() < 1) {
+			if(Arena.getState() == GameState.STARTING) {
+				Main.getInstance().broadcast(ChatColor.RED + p.getName() + ChatColor.GREEN + " Heeft de game verlaten(" + Arena.getPlayers().size() + "/20)");
+				Arena.getPlayers().remove(p.getName());
+			}
+			if(Team.demonen.contains(p.getName())) 
+				Team.removeDemonen(p);
+			
+			if(Team.mensen.contains(p.getName())) 
+				Team.removeMensen(p);
+			
+			Arena.getPlayers().remove(p.getName());
+			int n = Arena.getPlayers().size() - 1;
+			Main.getInstance().broadcast(ChatColor.RED + p.getName() + ChatColor.GREEN + " Heeft de game verlaten(" + Arena.getPlayers().size() + "/20)");
+			Arena.reloadScoreboard();
+			if(Team.getInstance().getMensen().size() == 0) {
 				Arena.stop();
 				return;
 			}
-			if(Team.getInstance().getDemonen().size() < 1) {
+			if(Team.getInstance().getDemonen().size() == 0) {
 				Arena.stop();
 				return;
 			}
-			if(Arena.getPlayers().size() < 1) {
+			if(Arena.getPlayers().size() == 0) {
 				Arena.stop();
 				return;				
 			}
-			Team.getInstance().getTeam(p).remove(p.getName());
-			Arena.getPlayers().remove(p.getName());
-			int n = Arena.getPlayers().size() - 1;
-			Main.getInstance().broadcast(ChatColor.RED + p.getName() + ChatColor.GREEN + " Heeft de game verlaten(" + n + "/20)");
-			Arena.reloadScoreboard();
 		
 	}
 		@EventHandler
@@ -182,6 +191,8 @@ public class Events implements Listener {
 						}
 					}.runTaskLater(Main.getInstance(), 200);
 		        	
+					taker.getInventory().clear();
+					taker.removePotionEffect(PotionEffectType.INVISIBILITY);
 		    		taker.getInventory().addItem(i);
 		    		taker.getInventory().setHelmet(new ItemStack(Material.SKULL_ITEM, 1, (byte) 1));
 		    		Team.getInstance().getTeam(taker).remove(taker.getName());
@@ -257,6 +268,11 @@ public class Events implements Listener {
 			if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
 				//INVIS
 				if(e.getPlayer().getItemInHand().getType() == Material.WATCH) {
+					if(cooldown3.contains(e.getPlayer().getName())) {
+						e.getPlayer().sendMessage(ChatColor.RED + "Je kan nu niet onzichtbaar worden want je hebt een cooldown");
+						e.getPlayer().sendTitle(ChatColor.RED + "Je kan nu niet onzichtbaar worden", null);
+						return;
+					}
 					cooldown3.add(e.getPlayer().getName());
 					e.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 300, 1));
 					new BukkitRunnable() {
@@ -271,6 +287,11 @@ public class Events implements Listener {
 				}
 				//TELEPORTER
 				if(e.getPlayer().getItemInHand().getType() == Material.COMPASS) {
+					if(cooldown.contains(e.getPlayer().getName())) {
+						e.getPlayer().sendMessage(ChatColor.RED + "Je kan nu niet teleporteren worden want je hebt een cooldown");
+						e.getPlayer().sendTitle(ChatColor.RED + "Je kan nu niet teleporteren worden", null);
+						return;
+					}
 					cooldown.add(e.getPlayer().getName());
 					cooldown2.add(e.getPlayer().getName());
 					List<String> players1 = new ArrayList<String>();
@@ -281,12 +302,14 @@ public class Events implements Listener {
 					int random = new Random().nextInt(players1.size());
 					Player p = Bukkit.getPlayer(players1.get(random));
 					e.getPlayer().teleport(p);
+					p.playSound(p.getLocation(), Sound.ENTITY_BLAZE_DEATH, 1, 0.2f);
+					p.sendTitle(ChatColor.DARK_RED + "EEN DEMOON", ChatColor.BLACK + "is naar je toe geteleporteerd");
 					new BukkitRunnable() {
 						
 						@Override
 						public void run() {
 							cooldown.remove(e.getPlayer().getName());
-							e.getPlayer().sendMessage(ChatColor.AQUA + "Teleporter Cooldown afgelopen!");
+							e.getPlayer().sendMessage(ChatColor.AQUA + "Je kan nu weer teleporteren!");
 							
 						}
 					}.runTaskLater(Main.getInstance(), 1200);
@@ -295,7 +318,7 @@ public class Events implements Listener {
 						@Override
 						public void run() {
 							cooldown2.remove(e.getPlayer().getName());
-							e.getPlayer().sendMessage(ChatColor.AQUA + "Je kan nu iemand slaan met je wand!!");
+							e.getPlayer().sendMessage(ChatColor.AQUA + "Je kan nu iemand slaan met je wand!");
 							
 						}
 					}.runTaskLater(Main.getInstance(), 200);
