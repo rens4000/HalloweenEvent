@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffectType;
 
 public class Team {
 	
@@ -35,21 +34,6 @@ public class Team {
 	}
 	public List<String> getDemonen() {
 		return demonen;
-	}
-	
-	public static void removeTeam(Player p) {
-		if(getTeam(p) == null) 
-			return;
-		if(getTeam(p) == mensen) {
-			removeMensen(p);
-			p.removePotionEffect(PotionEffectType.SPEED);
-			return;
-		}
-		if(getTeam(p) == demonen) {
-			removeDemonen(p);
-			p.removePotionEffect(PotionEffectType.NIGHT_VISION);
-			return;
-		}
 	}
 	
 	public static List<String> getTeam(Player p) {

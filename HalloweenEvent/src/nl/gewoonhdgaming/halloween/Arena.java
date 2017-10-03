@@ -272,7 +272,7 @@ public class Arena {
 		}
 		for(int i = 0; i < players.size(); i++) {
 			Player p = Bukkit.getPlayer(players.get(i));
-			players.remove(p);
+			players.remove(p.getName());
 			if(p.isOnline()) p.performCommand("lobby");
 		}
 		for(int i = 0; i < Main.getEvents().cooldown.size(); i++) {

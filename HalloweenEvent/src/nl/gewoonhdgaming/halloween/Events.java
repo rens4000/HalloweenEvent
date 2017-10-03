@@ -102,7 +102,6 @@ public class Events implements Listener {
 		p.teleport(Arena.getLobby());
 	}
 	
-		@SuppressWarnings("static-access")
 		@EventHandler
 		public void PlayerJoinQuit(PlayerQuitEvent e) {
 			Player p = e.getPlayer();
@@ -118,7 +117,6 @@ public class Events implements Listener {
 				Team.removeMensen(p);
 			
 			Arena.getPlayers().remove(p.getName());
-			int n = Arena.getPlayers().size() - 1;
 			Main.getInstance().broadcast(ChatColor.RED + p.getName() + ChatColor.GREEN + " Heeft de game verlaten(" + Arena.getPlayers().size() + "/20)");
 			Arena.reloadScoreboard();
 			if(Team.getInstance().getMensen().size() == 0) {
@@ -174,10 +172,10 @@ public class Events implements Listener {
 		        } else {
 		        	
 		        	if(cooldown2.contains(damagerPlayer.getName())) {
-		        		damager.sendMessage(ChatColor.RED + "Je hebt nog een cooldown!");
-		        		e.setCancelled(true);
-		        		return;
-		        	}
+		        		damagerPlayer.sendMessage(ChatColor.RED + "Je kan nu niet slaan met je staf want je hebt een cooldown");
+		        		damagerPlayer.sendTitle(ChatColor.RED + "Je kan nu niet slaan", null);
+						return;
+					}
 		        	
 		        	cooldown2.add(damagerPlayer.getName());
 		        	
@@ -288,8 +286,8 @@ public class Events implements Listener {
 				//TELEPORTER
 				if(e.getPlayer().getItemInHand().getType() == Material.COMPASS) {
 					if(cooldown.contains(e.getPlayer().getName())) {
-						e.getPlayer().sendMessage(ChatColor.RED + "Je kan nu niet teleporteren worden want je hebt een cooldown");
-						e.getPlayer().sendTitle(ChatColor.RED + "Je kan nu niet teleporteren worden", null);
+						e.getPlayer().sendMessage(ChatColor.RED + "Je kan nu niet teleporteren want je hebt een cooldown");
+						e.getPlayer().sendTitle(ChatColor.RED + "Je kan nu niet teleporteren", null);
 						return;
 					}
 					cooldown.add(e.getPlayer().getName());

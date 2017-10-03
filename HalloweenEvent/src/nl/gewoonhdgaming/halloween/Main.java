@@ -77,6 +77,15 @@ public class Main extends JavaPlugin {
 			if(!p.hasPermission("GHG.Admin")) {
 				return false;
 			}
+			
+			if(args.length == 0) {
+				p.sendMessage(ChatColor.DARK_RED + "HalloweenEvent");
+				p.sendMessage(ChatColor.WHITE + "/halloween setspawn");
+				p.sendMessage(ChatColor.WHITE + "/halloweensetspawn2");
+				p.sendMessage(ChatColor.WHITE + "/halloween setlobby");
+				p.sendMessage(ChatColor.WHITE + "/halloween toggle");
+
+			}
 			if(args.length > 0) {
 				if(args[0].equalsIgnoreCase("setspawn")) {
 					Location l = p.getLocation();
