@@ -32,7 +32,7 @@ public class Arena {
 	private static Location lobby;
 	private static Location spawn1;
 	private static Location spawn2;
-	private static int countdown = 15;
+	private static int countdown = 30;
 	private  static int duur = 300;
 	private static boolean activated = false;
 	private static GameState state = GameState.WAITING;
@@ -89,7 +89,7 @@ public class Arena {
 		if(players.size() == 1)
 			return;
 		if(state != GameState.WAITING) {
-			countdown = 15;
+			countdown = 30;
 			for(String s : players) {
 				Player p = Bukkit.getPlayer(s);
 				p.setLevel(0);
@@ -122,7 +122,7 @@ public class Arena {
 					Player p = Bukkit.getPlayer(s);
 					p.setLevel(countdown);
 				}
-				if(countdown == 1) {
+				if(countdown == 0) {
 					cancel();
 					start();
 				}
@@ -162,7 +162,7 @@ public class Arena {
 		r.sendMessage(ChatColor.DARK_RED + "Je bent een demoon! Je moet ervoor zorgen dat iedereen een demoon wordt door ze te slaan met je demonen staf!");
 		r.sendTitle(ChatColor.DARK_RED + "Je bent een demoon", null);
 		r.teleport(spawn2);
-		r.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 301, 1));
+		r.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 6000, 1));
 		ItemStack i2 = new ItemStack(Material.COMPASS);
 		ItemMeta im2 = i2.getItemMeta();
 		im2.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Teleporter");
@@ -256,16 +256,18 @@ public class Arena {
 		Main.getInstance().getLogger().info("STOPPING");
 		state= GameState.RESETING;
 		duur = 300;
-		countdown = 15;
+		countdown = 30;
 		
 		for(int i = 0; i < Team.demonen.size(); i++) {
 			Player p = Bukkit.getPlayer(Team.demonen.get(i));
 			Team.removeDemonen(p);
 			players.remove(p.getName());
+			p.removePotionEffect(PotionEffectType.NIGHT_VISION);
 			p.performCommand("lobby");
 		}
 		for(int i = 0; i < Team.mensen.size(); i++) {
 			Player p = Bukkit.getPlayer(Team.mensen.get(i));
+			p.removePotionEffect(PotionEffectType.INVISIBILITY);
 			Team.removeMensen(p);
 			players.remove(p.getName());
 			p.performCommand("lobby");

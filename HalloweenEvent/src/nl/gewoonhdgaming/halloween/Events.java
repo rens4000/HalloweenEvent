@@ -110,11 +110,15 @@ public class Events implements Listener {
 				Main.getInstance().broadcast(ChatColor.RED + p.getName() + ChatColor.GREEN + " Heeft de game verlaten(" + Arena.getPlayers().size() + "/20)");
 				Arena.getPlayers().remove(p.getName());
 			}
-			if(Team.demonen.contains(p.getName())) 
+			if(Team.demonen.contains(p.getName())) {
+				p.removePotionEffect(PotionEffectType.NIGHT_VISION);
 				Team.removeDemonen(p);
+			}
 			
-			if(Team.mensen.contains(p.getName())) 
+			if(Team.mensen.contains(p.getName())) {
+				p.removePotionEffect(PotionEffectType.INVISIBILITY);
 				Team.removeMensen(p);
+			}
 			
 			Arena.getPlayers().remove(p.getName());
 			Main.getInstance().broadcast(ChatColor.RED + p.getName() + ChatColor.GREEN + " Heeft de game verlaten(" + Arena.getPlayers().size() + "/20)");
@@ -193,10 +197,11 @@ public class Events implements Listener {
 					taker.removePotionEffect(PotionEffectType.INVISIBILITY);
 		    		taker.getInventory().addItem(i);
 		    		taker.getInventory().setHelmet(new ItemStack(Material.SKULL_ITEM, 1, (byte) 1));
+		    		
 		    		Team.getInstance().getTeam(taker).remove(taker.getName());
 		    		Team.getInstance().addDemonen(taker);
 		    		taker.sendTitle(ChatColor.DARK_RED + "Je bent een demoon", null);
-		    		taker.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 301, 1));
+		    		taker.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 6000, 1));;
 		    		ItemStack i2 = new ItemStack(Material.COMPASS);
 		    		ItemMeta im2 = i2.getItemMeta();
 		    		im2.setDisplayName(ChatColor.GREEN + "" + ChatColor.BOLD + "Teleporter");
@@ -207,6 +212,8 @@ public class Events implements Listener {
 		    		i2.setItemMeta(im2);
 		    		taker.getInventory().addItem(i2);
 		    		taker.sendMessage(ChatColor.DARK_RED + "Je bent in een demoon veranderd! Zorg ervoor dat iedereen een demoon wordt door ze te slaan met je staf!");
+		    		if(!(Team.getInstance().mensen.size() < 1))
+		    		Main.getInstance().broadcast(ChatColor.AQUA + "Er zijn nog " + Team.mensen.size() + " mensen over");
 		    		if(Team.getInstance().mensen.size() < 1) {
 				    	Main.getInstance().broadcast(ChatColor.DARK_RED + "De Demonen hebben gewonnen!");
 				    	Main.getInstance().broadcastTitle(ChatColor.DARK_RED + "De Demonen hebben gewonnen!", ChatColor.BLACK + "De server wordt herstart");
