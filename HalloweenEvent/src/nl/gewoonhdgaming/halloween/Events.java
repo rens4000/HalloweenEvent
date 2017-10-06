@@ -109,6 +109,7 @@ public class Events implements Listener {
 			if(Arena.getState() == GameState.STARTING) {
 				Main.getInstance().broadcast(ChatColor.RED + p.getName() + ChatColor.GREEN + " Heeft de game verlaten(" + Arena.getPlayers().size() + "/20)");
 				Arena.getPlayers().remove(p.getName());
+				return;
 			}
 			if(Team.demonen.contains(p.getName())) {
 				p.removePotionEffect(PotionEffectType.NIGHT_VISION);
