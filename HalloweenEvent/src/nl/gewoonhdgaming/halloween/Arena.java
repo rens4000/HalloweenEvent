@@ -72,7 +72,7 @@ public class Arena {
 		final int num = Arena.getPlayers().size();
 		final Score status = obj.getScore(ChatColor.RED + "Beschikbaar");
 		status.setScore(5);
-		final Score status2 = obj.getScore(ChatColor.YELLOW + "van 31 Okt t/m 11 Nov!");
+		final Score status2 = obj.getScore(ChatColor.YELLOW + "van 21 Okt t/m 11 Nov!");
 		status2.setScore(5);
 		
 		final Score player = obj.getScore(ChatColor.AQUA + "Spelers: " + num + "/20");
