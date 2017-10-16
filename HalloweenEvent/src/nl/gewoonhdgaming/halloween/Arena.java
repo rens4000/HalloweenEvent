@@ -217,6 +217,7 @@ public class Arena {
 				}
 				
 				if(duur == 0) {
+					Main.getInstance().broadcast(ChatColor.GREEN + "De mensen hebben gewonnen! De server wordt herstart!");
 					stopwait();
 				}
 				duur = duur - 1;
@@ -245,11 +246,10 @@ public class Arena {
 
 			@Override
 			public void run() {
-				Main.getInstance().broadcast(ChatColor.GREEN + "De mensen hebben gewonnen! De server wordt herstart!");
 				stop();
 			}
 			
-		}.runTaskLater(Main.getInstance(), 100);
+		}.runTaskLater(Main.getInstance(), 10);
 	}
 	
 	public static void stop() {
