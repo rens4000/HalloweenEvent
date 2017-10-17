@@ -74,22 +74,24 @@ public class Arena {
 		status.setScore(5);
 		final Score status2 = obj.getScore(ChatColor.YELLOW + "van 21 Okt t/m 11 Nov!");
 		status2.setScore(5);
+		final Score status3 = obj.getScore(ChatColor.YELLOW + "/audio voor meer plezier!");
+		status3.setScore(4);
 		
 		final Score player = obj.getScore(ChatColor.AQUA + "Spelers: " + num + "/20");
-		player.setScore(4);
+		player.setScore(3);
 
 		final Score filler2 = obj.getScore("");
-		filler2.setScore(1);
+		filler2.setScore(2);
 
 		final Score serverName = obj.getScore(ChatColor.AQUA + "GewoonHDGaming");
-		serverName.setScore(0);
+		serverName.setScore(1);
 }
 	
 	public static void countdown() {
 		if(players.size() == 1)
 			return;
 		if(state != GameState.WAITING) {
-			countdown = 30;
+			countdown = 40;
 			for(String s : players) {
 				Player p = Bukkit.getPlayer(s);
 				p.setLevel(0);
@@ -197,6 +199,13 @@ public class Arena {
 		}
 		
 		Main.getInstance().broadcast(ChatColor.GREEN + "De game eindigd in 300 secondes!");
+		
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			String command = "ac " + "send" + " " + player.getName() + " " + "halloween";
+			Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
+
+		}
+
 		
 		if(state != GameState.STARTING)
 			return;
