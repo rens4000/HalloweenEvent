@@ -108,7 +108,7 @@ public class Arena {
 				countdown = countdown -1;
 				if(state != GameState.STARTING) {
 					Main.getInstance().broadcast(ChatColor.RED + "Te weinig spelers, het aftellen is gestopt.");
-					countdown = 15;
+					countdown = 40;
 					for(String s : players) {
 						Player p = Bukkit.getPlayer(s);
 						p.setLevel(0);
