@@ -107,8 +107,13 @@ public class Events implements Listener {
 			Player p = e.getPlayer();
 			if(!Arena.isActivated()) return;
 			if(Arena.getState() == GameState.STARTING) {
-				Main.getInstance().broadcast(ChatColor.RED + p.getName() + ChatColor.GREEN + " Heeft de game verlaten(" + Arena.getPlayers().size() + "/20)");
+				int count = Arena.getPlayers().size() - 1;
+				Main.getInstance().broadcast(ChatColor.RED + p.getName() + ChatColor.GREEN + " Heeft de game verlaten(" + count + "/20)");
 				Arena.getPlayers().remove(p.getName());
+				Arena.reloadScoreboard();
+				if(count < 2) 
+					Arena.setState(GameState.WAITING);
+				
 				return;
 			}
 			if(Team.demonen.contains(p.getName())) {
