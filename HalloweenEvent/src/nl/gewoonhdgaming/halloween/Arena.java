@@ -99,6 +99,11 @@ public class Arena {
 			return;
 		}
 		Main.getInstance().broadcast(ChatColor.AQUA + "Minimum spelers is behaald! Aftellen is begonnen!");
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			String command = "ac " + "send" + " " + player.getName() + " " + "wachtmuziek";
+			Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
+
+		}
 		state = GameState.STARTING;
 		new BukkitRunnable() {
 			
