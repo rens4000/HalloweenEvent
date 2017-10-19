@@ -127,8 +127,30 @@ public class Main extends JavaPlugin {
 					saveConfig();
 					p.sendMessage("De arena is gezet naar " + Arena.isActivated());
 				}
+				if(args[0].equalsIgnoreCase("he")) {
+					String target = Bukkit.getServer().getPlayer(args[1]).getName();
+					p.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "AudioSystem" + ChatColor.WHITE + "] De halloween audio is herstart voor de speler");
+					String audiocommand = "ac " + "send" + " " + target + " " + "halloween";
+					Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), audiocommand);
+				}
+				if(args[0].equalsIgnoreCase("play")) {
+					String target = Bukkit.getServer().getPlayer(args[1]).getName();
+					p.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "AudioSystem" + ChatColor.WHITE + "] De audio is herstart voor de speler");
+					String audiocommand = "ac " + "send" + " " + target + " " + args[2];
+					Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), audiocommand);
+				}
+				if(args[0].equalsIgnoreCase("audiolist")) {
+					p.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "AudioSystem" + ChatColor.WHITE + "] We halen de playerlist op....");
+					String audiocommand = "ac " + "list" + " " + "players";
+					Bukkit.dispatchCommand(p, audiocommand);
+				}
+				if(args[0].equalsIgnoreCase("audioadmin")) {
+					p.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "AudioSystem" + ChatColor.WHITE + "] AudioClient V3 Intergrated by Boykev");
+				}
 			}
 		}
+		
+		
 		return false;
 	}
 

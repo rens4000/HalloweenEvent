@@ -5,3 +5,5 @@ main: nl.gewoonhdgaming.halloween.Main
 commands:
   halloween:
     description: Zooi
+  audioadmin:
+    description: AudioAdmin System
