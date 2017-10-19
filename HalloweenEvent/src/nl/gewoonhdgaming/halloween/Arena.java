@@ -51,6 +51,8 @@ public class Arena {
 		int num = Arena.getPlayers().size() + 1;
 		Main.getInstance().broadcast(ChatColor.RED + p.getName() + ChatColor.GREEN + " Heeft de game gejoined(" + num + "/20)");
 		p.getInventory().clear();
+		String command = "sudo" + " " + p.getName() + " " + "audio";
+		Bukkit.dispatchCommand(Bukkit.getServer().getConsoleSender(), command);
 		players.add(p.getName());
 		p.teleport(lobby);
 		countdown();
